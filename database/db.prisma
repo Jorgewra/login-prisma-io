@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model companies {
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
+  companyName    String
+  identityFiscal String
+  address        String
+  alertPhone     String
+  contactPhone   String
+  secretToken    String     @unique
+  accessToken    String     @unique
+  dateExpire     DateTime
+  balanceMessage Int
+  balanceContact Int
+  balanceUser    Int
+  admin          Boolean @default(false)
+  active         Boolean @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  contacts       contacts[]
+  users          users[]
+}
+
+model contacts {
+  id         Int        @id @default(autoincrement())
+  companyId  Int
+  name       String?
+  phone      String     @unique
+  address    String?
+  externalId String?
+  busy       Boolean    @default(false)
+  help       Boolean    @default(false)
+  active     Boolean    @default(true)
+  deleted    Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  companies  companies  @relation(fields: [companyId], references: [id])
+  messages   messages[]
+  ratings    ratings[]
+
+  @@index([companyId], name: "companyId")
+}
+
+model messages {
+  id           Int                  @id @default(autoincrement())
+  status       messages_status      @default(pending)
+  messageError String
+  phone        String
+  typeMessage  messages_typeMessage @default(Text)
+  contactId    Int
+  message      String
+  messageId    String?
+  dateTask     DateTime             @default(now()) 
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  contacts     contacts             @relation(fields: [contactId], references: [id])
+
+  @@index([contactId], name: "contactId")
+}
+
+model ratings {
+  id        Int             @id @default(autoincrement())
+  note      Int
+  comment   String?
+  contactId Int
+  userId    Int
+  message   String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  contacts  contacts        @relation(fields: [contactId], references: [id])
+  users     users           @relation(fields: [userId], references: [id])
+
+  @@index([contactId], name: "contactId")
+  @@index([userId], name: "userId")
+}
+
+model users {
+  id        Int       @id @default(autoincrement())
+  user      String    @unique
+  password  String    @unique
+  email     String?
+  phone     String?
+  tokenSocket String?
+  status    Int      @default(1)
+  active    Boolean
+  companyId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  companies companies @relation(fields: [companyId], references: [id])
+
+  userstimes userstimes[]
+  ratings    ratings[]
+  @@index([companyId], name: "companyId")
+}
+
+model userstimes {
+  id            Int      @id @default(autoincrement())
+  quantityAttend Int
+  tempAttend    Int
+  active        Boolean
+  loginDate     DateTime
+  logoutDate    DateTime
+  userId        Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  users         users    @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userId")
+}
+
+enum messages_status {
+  read
+  delivered
+  accepted
+  pending
+  sent
+  rejected
+  failed
+  received
+  deleted
+  unknown
+  error
+}
+
+enum messages_typeMessage {
+  Text
+  File
+  Image
+  Audio
+}
