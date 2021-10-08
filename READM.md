@@ -14,6 +14,10 @@
     ``` 
   2. docker network create -d bridge app-network
    
+# Events Sockets
+  1. profile - connection security send info user
+  2. users.login - notify user login ou logout
+
 # technology used
  - [Prisma](https://www.prisma.io/)
  - [NodeJs](https://nodejs.org/en/)
