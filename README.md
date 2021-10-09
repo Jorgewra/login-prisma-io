@@ -23,7 +23,7 @@
 
 # dependence's
   - [NodeJS](https://nodejs.org/en/)
-  - Data Base Mysql ou PostGress
+  - Data Base Mysql ou PostGres
   
   
 ## Authors
