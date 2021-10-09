@@ -7,12 +7,10 @@
 
 # Command Dev
   1. Prisma IO
-    ```
-    1. npx prisma generate --schema ./database/db.prisma
-    2. npx prisma migrate dev --schema ./database/db.prisma
-    3. Atualizar:npx prisma db pull --schema ./database/db.prisma
-    ``` 
-  2. docker network create -d bridge app-network
+   
+    ```1. npx prisma generate --schema ./database/db.prisma```
+    ```2. npx prisma migrate dev --schema ./database/db.prisma```
+    ```3. Atualizar:npx prisma db pull --schema ./database/db.prisma```
    
 # Events Sockets
   1. profile - connection security send info user
@@ -25,6 +23,7 @@
 
 # dependence's
   - [NodeJS](https://nodejs.org/en/)
+  - Data Base Mysql ou PostGress
   
   
 ## Authors
